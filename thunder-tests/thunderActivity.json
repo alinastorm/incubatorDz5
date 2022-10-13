@@ -1,0 +1,139 @@
+[
+  {
+    "_id": "9f4e0176-ee3b-45a3-b79b-e0df4c40d2f4",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://127.0.0.1:9001/videos",
+    "url": "http://127.0.0.1:9001/videos",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2022-09-15T13:05:05.319Z",
+    "modified": "2022-09-19T12:51:36.365Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "res-body",
+        "custom": "",
+        "action": "schema",
+        "value": "{ \"type\": \"array\", \"items\": [ { \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"integer\" }, \"canBeDownloaded\": { \"type\": \"boolean\" }, \"minAgeRestriction\": { \"type\": \"null\" }, \"createdAt\": { \"type\": \"string\" }, \"publicationDate\": { \"type\": \"string\" }, \"title\": { \"type\": \"string\" }, \"author\": { \"type\": \"string\" }, \"availableResolutions\": { \"type\": \"array\", \"items\": [ { \"type\": \"string\" } ] } }, \"required\": [ \"id\", \"canBeDownloaded\", \"minAgeRestriction\", \"createdAt\", \"publicationDate\", \"title\", \"author\", \"availableResolutions\" ] } ] }"
+      }
+    ]
+  },
+  {
+    "_id": "ecfaf315-211a-42f1-9894-70ba01edb994",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://127.0.0.1:9001/videos",
+    "url": "http://127.0.0.1:9001/videos",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2022-09-15T13:05:10.859Z",
+    "modified": "2022-09-15T13:05:10.889Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"title\": null,\n  \"author\": \"valid author\",\n  \"availableResolutions\": [\n    \"P144\",\n    \"P240\",\n    \"P720\"\n  ]\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "4157afed-dd31-46e9-ae26-285bb87438a5",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://127.0.0.1:9001/testing/all-data",
+    "url": "http://127.0.0.1:9001/testing/all-data",
+    "method": "DELETE",
+    "sortNum": 0,
+    "created": "2022-09-15T13:05:31.573Z",
+    "modified": "2022-09-15T13:05:31.591Z",
+    "headers": [],
+    "params": [],
+    "tests": [
+      {
+        "type": "res-code",
+        "custom": "",
+        "action": "equal",
+        "value": "205"
+      }
+    ]
+  },
+  {
+    "_id": "150a2263-154a-4d71-9cf9-68a2cac146d2",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://ubt.by",
+    "url": "http://ubt.by",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2022-09-15T13:17:02.695Z",
+    "modified": "2022-09-15T13:17:02.807Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "7a7b70c1-bf5c-4a2b-821b-9736abc6582e",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://ubt.by/sign-in",
+    "url": "http://ubt.by:8008/?Cookie={{Cookie}}",
+    "method": "POST",
+    "sortNum": 0,
+    "created": "2022-09-15T13:17:40.290Z",
+    "modified": "2022-09-15T13:37:06.723Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "Cookie",
+        "value": "{{Cookie}}",
+        "isPath": false
+      }
+    ],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"action\": \"login\",\n  \"email\": \"753464@gmail.com\",\n  \"password\": \"123\"\n}",
+      "form": []
+    },
+    "auth": {
+      "type": "oauth2"
+    },
+    "tests": []
+  },
+  {
+    "_id": "efcec1d0-6b7f-435a-b058-1193e35ad0f2",
+    "colId": "history",
+    "containerId": "",
+    "name": "https://www.thunderclient.com/welcome",
+    "url": "https://google.com",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2022-10-11T11:54:46.460Z",
+    "modified": "2022-10-11T13:16:25.950Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "f4e9df1b-23cc-4098-a37a-2ae903a784c1",
+    "colId": "history",
+    "containerId": "",
+    "name": "https://api.bybit.com/v2/public/orderBook/L2?symbol=BTCUSD",
+    "url": "https://api.bybit.com/v2/public/orderBook/L2?symbol=BTCUSD",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2022-10-11T12:43:12.250Z",
+    "modified": "2022-10-11T12:43:12.569Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "symbol",
+        "value": "BTCUSD",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  }
+]
