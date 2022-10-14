@@ -1,5 +1,5 @@
 import { Collection, MongoClient, Document, ObjectId, Filter } from 'mongodb'
-import { AdapterType, IObject, searchNameTerm } from '../types/types';
+import { AdapterType, IObject, Paginator, searchNameTerm } from '../types/types';
 
 
 // Connection URL
@@ -87,8 +87,21 @@ class DbMongo implements AdapterType {
             }
         }
         return await collection.countDocuments(filter)
-    } 
+    }
     async readAllOrByPropPaginationSort(collectionName: string, pageNumber: number, pageSize: number, sortBy: string, sortDirection: 1 | -1, searchNameTerm?: searchNameTerm) {
+
+        const setPaginator = async (items: any) => {
+            const count = await this.readCount(collectionName, searchNameTerm)
+            const result: Paginator<any> = {
+                "pagesCount": Math.ceil(count / pageSize),
+                "page": pageNumber,
+                "pageSize": pageSize,
+                "totalCount": count,
+                items
+            }
+            return result
+        }
+
 
         const collection: Collection<Document> = database.collection(collectionName)
         if (searchNameTerm) {
@@ -100,7 +113,7 @@ class DbMongo implements AdapterType {
                     find[key] = element :
                     find[key] = { $regex: element, $options: 'i' }
             }
-            return (await collection
+            const items = (await collection
                 .find(find)
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
@@ -110,8 +123,11 @@ class DbMongo implements AdapterType {
                     const { _id, ...other } = elem
                     return { id: _id, ...other }
                 })
+            const result = setPaginator(items)
+
+            return result
         }
-        return (await collection
+        const items = (await collection
             .find()
             .skip((pageNumber - 1) * pageSize)
             .limit(pageSize)
@@ -121,6 +137,9 @@ class DbMongo implements AdapterType {
                 const { _id, ...other } = elem
                 return { id: _id, ...other }
             })
+        const result = setPaginator(items)
+
+        return result
     }
     async readOne(collectionName: string, id: string) {
         const collection: Collection<Document> = database.collection(collectionName)

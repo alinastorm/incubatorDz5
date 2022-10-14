@@ -4,8 +4,8 @@ import { nameBodyValidationMiddleware } from '../middlewares/name-validation-mid
 import { youtubeUrlBodyValidationMiddleware } from '../middlewares/youtubeUrl-validation-middleware';
 import { authorizationBasicMiddleware } from '../middlewares/authorization-validation-middleware';
 
-import { checkValidationMiddleware } from '../middlewares/checkValidation-middleware';
-import { searchNameTermQueryValidationMiddleware } from '../middlewares/searchNameTerm-validation-middleware';
+import { mainValidator } from '../middlewares/mainValidator-middleware';
+import { searchNameTermQueryValidationMiddleware } from '../middlewares/searchNameTerm-query-validation-middleware';
 import { pageNumberQueryValidationMiddleware } from '../middlewares/pageNumber-validation-middleware';
 import { sortByBlogsQueryValidationMiddleware } from '../middlewares/sortByBlogs-validation-middleware';
 import { pageSizeQueryValidationMiddleware } from '../middlewares/pageSize-validation-middleware';
@@ -32,7 +32,7 @@ blogsRoutes.post(`/blogs`,
     authorizationBasicMiddleware,
     nameBodyValidationMiddleware,
     youtubeUrlBodyValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     blogsController.createOne)
 
 blogsRoutes.get(`/blogs/:blogId/posts`,
@@ -41,7 +41,7 @@ blogsRoutes.get(`/blogs/:blogId/posts`,
     pageSizeQueryValidationMiddleware,
     sortByPostsQueryValidationMiddleware,
     sortDirectionQueryValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     bloggerParamIdInBDValidationMiddleware,
     blogsController.readAllPostsByBlogIdWithPaginationAndSort)
 
@@ -52,13 +52,13 @@ blogsRoutes.post(`/blogs/:blogId/posts`,
     titleBodyValidationMiddleware,
     shortdescriptionBodyValidationMiddleware,
     contentBodyValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     bloggerParamIdInBDValidationMiddleware,
     blogsController.createPostsByBlogId)
 
 blogsRoutes.get(`/blogs/:blogId`,
     blogIdParamUriValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     bloggerParamIdInBDValidationMiddleware,
     blogsController.readOne)
 
@@ -67,14 +67,14 @@ blogsRoutes.put(`/blogs/:blogId`,
     blogIdParamUriValidationMiddleware,
     nameBodyValidationMiddleware,
     youtubeUrlBodyValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     bloggerParamIdInBDValidationMiddleware,
     blogsController.updateOne)
 
 blogsRoutes.delete(`/blogs/:blogId`,
     authorizationBasicMiddleware,
     blogIdParamUriValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     bloggerParamIdInBDValidationMiddleware,
     blogsController.deleteOne)
 

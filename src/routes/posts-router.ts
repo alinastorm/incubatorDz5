@@ -5,7 +5,7 @@ import { postIdParamValidationMiddleware } from '../middlewares/postIdParam-vali
 import { contentBodyValidationMiddleware } from '../middlewares/content-validation-middleware';
 import { shortdescriptionBodyValidationMiddleware } from '../middlewares/shortdescription-validation-middleware';
 import { authorizationBasicMiddleware } from '../middlewares/authorization-validation-middleware';
-import { checkValidationMiddleware } from '../middlewares/checkValidation-middleware';
+import { mainValidator } from '../middlewares/mainValidator-middleware';
 import { pageNumberQueryValidationMiddleware } from '../middlewares/pageNumber-validation-middleware';
 import { pageSizeQueryValidationMiddleware } from '../middlewares/pageSize-validation-middleware';
 import { sortByPostsQueryValidationMiddleware } from '../middlewares/sortByPosts-validation-middleware';
@@ -22,7 +22,7 @@ postsRoutes.get(`/${mainRoute}`,
     pageSizeQueryValidationMiddleware,
     sortByPostsQueryValidationMiddleware,
     sortDirectionQueryValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     postsController.readAllPaginationSort)
 
 postsRoutes.post(`/${mainRoute}`,
@@ -31,13 +31,13 @@ postsRoutes.post(`/${mainRoute}`,
     shortdescriptionBodyValidationMiddleware,
     contentBodyValidationMiddleware,
     blogIdBodyWithCheckBDValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     // bloggerBodyIdInBDValidationMiddleware,
     postsController.createOne)
 
 postsRoutes.get(`/${mainRoute}/:postId`,
     postIdParamValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     postParamIdInBDValidationMiddleware,
     postsController.readOne)
 
@@ -48,7 +48,7 @@ postsRoutes.put(`/${mainRoute}/:postId`,
     shortdescriptionBodyValidationMiddleware,
     contentBodyValidationMiddleware,
     blogIdBodyWithCheckBDValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     postParamIdInBDValidationMiddleware,
     // bloggerBodyIdInBDValidationMiddleware,
     postsController.updateOne)
@@ -56,7 +56,7 @@ postsRoutes.put(`/${mainRoute}/:postId`,
 postsRoutes.delete(`/${mainRoute}/:postId`,
     authorizationBasicMiddleware,
     postIdParamValidationMiddleware,
-    checkValidationMiddleware,
+    mainValidator,
     postParamIdInBDValidationMiddleware,
     postsController.deleteOne)
 

@@ -2,10 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { APIErrorResult, FieldError } from '../types/types';
 
-export const checkValidationMiddleware = (req: any, res: Response, next: NextFunction) => {
+export const mainValidator = (req: any, res: Response, next: NextFunction) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.log('mainValidator:', errors);
+
         const error: Array<FieldError> = errors.array({ onlyFirstError: true }).map(e => {
             return {
                 message: e.msg,
@@ -13,14 +15,14 @@ export const checkValidationMiddleware = (req: any, res: Response, next: NextFun
             }
         })
         const result: APIErrorResult = { errorsMessages: error }
-        if(req.method==="GET"){
-            console.log('req.method:', req.method);
-            console.log('req.url:', req.url);
-            console.log('req.params:', req.params);
-            console.log('req.query:', req.query);
-            console.log('req.body:', req.body);
-            console.log('result:', result);
-        }
+        // if (req.method === "GET") {
+        //     console.log('req.method:', req.method);
+        //     console.log('req.url:', req.url);
+        //     console.log('req.params:', req.params);
+        //     console.log('req.query:', req.query);
+        //     console.log('req.body:', req.body);
+        //     console.log('result:', result);
+        // }
 
         return res.status(400).json(result);
     }

@@ -24,5 +24,9 @@ class Service {
         const result: AuthViewModel = await dataService.readOne(this.collection, id)
         return result ? true : false
     }
+    async deleteAll() {
+        const result = await dataService.deleteAll(this.collection)
+        return result
+    }
 }
 export default new Service('auth')

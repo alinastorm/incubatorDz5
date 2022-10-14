@@ -16,26 +16,26 @@ class Service {
         return result
     }
     async readAllWithPaginationAndSort(pageNumber: number, pageSize: number, sortBy: keyof PostViewModel, sortDirection: 1 | -1) {
-        const posts:  PostViewModel[] = await dataService.readAllOrByPropPaginationSort(
+        const posts: Paginator<PostViewModel[]> = await dataService.readAllOrByPropPaginationSort(
             this.collection,
             pageNumber,
             pageSize,
             sortBy,
             sortDirection
         )
-        const count = await dataService.readCount(this.collection)
+        // const count = await dataService.readCount(this.collection)
 
-        const result: Paginator<PostViewModel> = {
-            "pagesCount": Math.ceil(count / pageSize),
-            "page": pageNumber,
-            "pageSize": pageSize,
-            "totalCount": count,
-            "items": posts
-        }
-        return result
+        // const result: Paginator<PostViewModel> = {
+        //     "pagesCount": Math.ceil(count / pageSize),
+        //     "page": pageNumber,
+        //     "pageSize": pageSize,
+        //     "totalCount": count,
+        //     "items": posts
+        // }
+        return posts
     }
     async readAllPostsByBlogIdWithPaginationAndSort(pageNumber: number, pageSize: number, sortBy: keyof PostViewModel, sortDirection: 1 | -1, blogId: string) {
-        const posts: PostViewModel[] = await dataService.readAllOrByPropPaginationSort(
+        const posts: Paginator<PostViewModel[]> = await dataService.readAllOrByPropPaginationSort(
             this.collection,
             pageNumber,
             pageSize,
@@ -43,16 +43,16 @@ class Service {
             sortDirection,
             { search: { blogId }, strict: true }
         )
-        const count = await dataService.readCount(this.collection, { search: { blogId }, strict: true })
+        // const count = await dataService.readCount(this.collection, { search: { blogId }, strict: true })
 
-        const result: Paginator<PostViewModel> = {
-            "pagesCount": Math.ceil(count / pageSize),
-            "page": pageNumber,
-            "pageSize": pageSize,
-            "totalCount": count,
-            "items": posts
-        }
-        return result
+        // const result: Paginator<PostViewModel> = {
+        //     "pagesCount": Math.ceil(count / pageSize),
+        //     "page": pageNumber,
+        //     "pageSize": pageSize,
+        //     "totalCount": count,
+        //     "items": posts
+        // }
+        return posts
     }
     async readOne(id: string) {
         const result: PostViewModel = await dataService.readOne(this.collection, id)

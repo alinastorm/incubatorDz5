@@ -1,13 +1,13 @@
 import { param } from 'express-validator';
 import { ObjectId } from 'mongodb';
 
-export const idMongoMiddleware = param('id')
+export const idMiddleware = param('id')
     .exists()
     // .isNumeric()
     // .withMessage({ message: 'wrong id', field: "id", code: 400 })
-    .customSanitizer((value:string) => {
-        return new ObjectId(value);
-      })
+    // .customSanitizer((value:string) => {
+    //     return new ObjectId(value);
+    //   })
 
 
     // import { param } from 'express-validator';

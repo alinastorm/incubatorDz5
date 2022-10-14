@@ -4,29 +4,42 @@ import { nameBodyValidationMiddleware } from '../middlewares/name-validation-mid
 import { youtubeUrlBodyValidationMiddleware } from '../middlewares/youtubeUrl-validation-middleware';
 import { authorizationBasicMiddleware } from '../middlewares/authorization-validation-middleware';
 
-import { checkValidationMiddleware } from '../middlewares/checkValidation-middleware';
+import { mainValidator } from '../middlewares/mainValidator-middleware';
+import { searchLoginTermQueryValidationMiddleware } from '../middlewares/searchLoginTerm-query-validation-middleware';
+import { searchEmailTermQueryValidationMiddleware } from '../middlewares/searchEmailTerm-query-validation-middleware';
+import { sortDirectionQueryValidationMiddleware } from '../middlewares/sortDirection-validation-middleware';
+import { pageSizeQueryValidationMiddleware } from '../middlewares/pageSize-validation-middleware';
+import { pageNumberQueryValidationMiddleware } from '../middlewares/pageNumber-validation-middleware';
+import { sortByUsersQueryValidationMiddleware } from '../middlewares/sortByUsers-validation-middleware';
+import { loginBodyValidationMiddleware } from '../middlewares/login-body-validation-middleware';
+import { passwordBodyValidationMiddleware } from '../middlewares/password-body-validation-middleware';
+import { emailBodyValidationMiddleware } from '../middlewares/email-validation-middleware';
+import { userIdParamUriValidationMiddleware } from '../middlewares/userId-param-validation-middleware';
 
 
 export const usersRoutes = express.Router()
 
 
 usersRoutes.get(`/users`,
-    authorizationBasicMiddleware,
-    nameBodyValidationMiddleware,
-    youtubeUrlBodyValidationMiddleware,
-    checkValidationMiddleware,
+    searchLoginTermQueryValidationMiddleware,
+    searchEmailTermQueryValidationMiddleware,
+    pageNumberQueryValidationMiddleware,
+    pageSizeQueryValidationMiddleware,
+    sortByUsersQueryValidationMiddleware,
+    sortDirectionQueryValidationMiddleware,
+    mainValidator,
     usersController.readAll)
 
 usersRoutes.post(`/users`,
     authorizationBasicMiddleware,
-    nameBodyValidationMiddleware,
-    youtubeUrlBodyValidationMiddleware,
-    checkValidationMiddleware,
+    loginBodyValidationMiddleware,
+    passwordBodyValidationMiddleware,
+    emailBodyValidationMiddleware,
+    mainValidator,
     usersController.createOne)
 
 usersRoutes.delete(`/users/:id`,
     authorizationBasicMiddleware,
-    nameBodyValidationMiddleware,
-    youtubeUrlBodyValidationMiddleware,
-    checkValidationMiddleware,
+    userIdParamUriValidationMiddleware,
+    mainValidator,
     usersController.deleteOne)

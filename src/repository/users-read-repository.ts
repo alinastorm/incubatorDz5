@@ -16,12 +16,12 @@ class Service {
         const search: any = {}
         searchEmailTerm ? search['searchEmailTerm'] = searchEmailTerm : 0
         searchLoginTerm ? search['searchLoginTerm'] = searchEmailTerm : 0
-        const searchNameTerm: searchNameTerm = { search, strict: true }
+        const searchNameTerm: searchNameTerm = { search, strict: false }
 
         const result: Paginator<UserViewModel> = await dataService.readAllOrByPropPaginationSort(this.collection, pageNumber, pageSize, sortBy, sortDirection, searchNameTerm)
         return result
     }
-    async readOne(id: string) {     
+    async readOne(id: string) {
         const result: UserViewModel = await dataService.readOne(this.collection, id)
         return result
     }
@@ -31,10 +31,10 @@ class Service {
         const elementUser: Omit<UserViewModel & UserInputModel, "id"> = { login, password, email, createdAt }
         const id: string = await dataService.createOne(this.collection, elementUser)
         const user: UserViewModel = await dataService.readOne(this.collection, id)
-        if (user) throw new Error("createOne User Error")
+        if (!user) throw new Error("createOne User Error")
         const elementAuth = { login, password, userId: id }
         const auth = await authReadRepository.createOne(elementAuth)
-        if (auth) throw new Error("createOne auth Error")
+        if (!auth) throw new Error("createOne auth Error")
         // const result: UserInputModel = await dataService.readAll(this.collection, searchTerm)
         return user
     }
@@ -46,6 +46,10 @@ class Service {
         if (!result) return false
 
         return true
+    }
+    async deleteAll() {
+        const result = await dataService.deleteAll(this.collection)
+        return result
     }
 }
 export default new Service('users')

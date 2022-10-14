@@ -79,7 +79,7 @@ export type RequestWithParamsQuery<P, Q> = Request<P, {}, {}, Q>
 export type RequestWithParamsBody<P, B> = Request<P, {}, B>
 export type RequestWithParamsQueryBody<P, Q, B> = Request<P, {}, B, Q>
 
-export enum SortDirections {
+export enum SortDirectionsType {
     asc = 1,
     desc = -1,
 }
