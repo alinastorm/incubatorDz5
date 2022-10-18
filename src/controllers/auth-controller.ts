@@ -1,22 +1,20 @@
-import { Response } from 'express';
-
-
-
-import { BlogViewModel, HTTP_STATUSES, RequestWithBody, LoginInputModel } from '../types/types';
-import authReadRepository from '../repository/auth-read-repository';
+import authReducer from '../reducers/auth-reducer';
+import { HTTP_STATUSES, RequestWithBody, LoginInputModel, searchNameTerm, AuthViewModel, ResponseWithCode } from '../types/types';
 
 
 class Controller {
 
 
-    async readOne(
+    async login(
         req: RequestWithBody<LoginInputModel>,
-        res: Response<BlogViewModel>
+        res: ResponseWithCode<204 | 401>
     ) {
-        const { password } = req.body
-        const element: LoginInputModel = { password }
-        const result: boolean = await authReadRepository.readOne(element)
-        if (!result) res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+        const { login, password } = req.body
+        const query: LoginInputModel = { login, password }
+        const result =  await authReducer.login(query)
+        
+
+        if (!result) return res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
     }
 

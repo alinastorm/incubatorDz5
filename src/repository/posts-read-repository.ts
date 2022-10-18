@@ -11,8 +11,8 @@ class Service {
 
     constructor(private collection: string) { }
 
-    async readAll() {
-        const result: PostViewModel[] = await dataService.readAll(this.collection)
+    async readAll(searchNameTerm?: searchNameTerm, sortBy?: string, sortDirection?: number) {
+        const result: PostViewModel[] = await dataService.readAll(this.collection, searchNameTerm, sortBy, sortDirection)
         return result
     }
     async readAllWithPaginationAndSort(pageNumber: number, pageSize: number, sortBy: keyof PostViewModel, sortDirection: 1 | -1) {

@@ -16,5 +16,5 @@ authRoutes.post(`/auth/login`,
     loginBodyValidationMiddleware,
     passwordBodyValidationMiddleware,
     mainValidator,
-    authController.readOne)
+    authController.login)
 

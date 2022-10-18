@@ -28,7 +28,7 @@ usersRoutes.get(`/users`,
     sortByUsersQueryValidationMiddleware,
     sortDirectionQueryValidationMiddleware,
     mainValidator,
-    usersController.readAll)
+    usersController.readAllPagination)
 
 usersRoutes.post(`/users`,
     authorizationBasicMiddleware,

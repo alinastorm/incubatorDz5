@@ -16,7 +16,7 @@ class Service {
     async createOne(data: PostInputModel & { blogName: string }) {
 
         // const { name } = await blogsReadRepository.readOne(data.blogId)
-        const element: PostViewModel = {
+        const element: Omit<PostViewModel,'id'> = {
             ...data,
             createdAt: new Date().toISOString()
         }
@@ -32,8 +32,8 @@ class Service {
         const result = await dataService.replaceOne(this.collection, id, data)
         return result
     }
-    async deleteOne(id: string) {
-        const result = await dataService.deleteOne(this.collection, id)
+    async deleteOne({ postId }: { postId: string }) {
+        const result = await dataService.deleteOne(this.collection, postId)
         return result
     }
     async deleteAll() {

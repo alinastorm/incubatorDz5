@@ -1,7 +1,7 @@
 import { Collection, MongoClient, Document, ObjectId, Filter } from 'mongodb'
 import { AdapterType, IObject, Paginator, searchNameTerm } from '../types/types';
 
-
+//Query Builder
 // Connection URL
 const url = 'mongodb+srv://AlexGr:mth0F2JOfBhmJlk4@cluster0.ojk6ayv.mongodb.net/?retryWrites=true&w=majority' || process.env.mongoURI || 'mongodb://127.0.0.1:27017' || 'строковое подключение к кластеру в атласе'
 const clientMongo = new MongoClient(url)

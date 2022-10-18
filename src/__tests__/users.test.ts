@@ -89,6 +89,15 @@ describe("/users", () => {
             })
         expect(status).toBe(204)
     })
+    test('Try login wrong user to the system', async () => {
+        const { status } = await request(httpServerService.server)
+            .post("/auth/login")
+            .send({
+                "login": "UserWrong",
+                "password": "PasswordWrong",
+            })
+        expect(status).toBe(401)
+    })
     let user: UserViewModel
     test('Return All users after added', async () => {
 
@@ -157,6 +166,15 @@ describe("/users", () => {
             .set('Authorization', 'Basic YWRtaW46cXdlcnR5')
 
         expect(status).toBe(204)
+    })
+    test('Try login after delete User to the system', async () => {
+        const { status } = await request(httpServerService.server)
+            .post("/auth/login")
+            .send({
+                "login": "User1",
+                "password": "Password1",
+            })
+        expect(status).toBe(401)
     })
     test('GET User after delete by ID', async () => {
         const { status } = await request(httpServerService.server)

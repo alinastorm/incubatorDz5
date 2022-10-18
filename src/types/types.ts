@@ -1,4 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request } from 'express';
+import { Response } from 'express-serve-static-core';
+
 export interface BlogInputModel {
     name: string//    maxLength: 15
     youtubeUrl: string // maxLength: 100     pattern: ^ https://([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$
@@ -21,7 +23,7 @@ export interface BlogViewModel {
     createdAt: string
 }
 export interface PostViewModel {
-    id?: string
+    id: string
     title: string
     shortDescription: string
     content: string
@@ -58,9 +60,9 @@ export interface AdapterType {
     deleteAll(collectionName: string): any
 }
 
-export interface searchNameTerm {
-    search: IObject
-    strict: boolean
+export interface searchNameTerm<T = IObject, U = boolean> {
+    search: T
+    strict: U
 }
 export enum HTTP_STATUSES {
     OK_200 = 200,
@@ -79,12 +81,16 @@ export type RequestWithParamsQuery<P, Q> = Request<P, {}, {}, Q>
 export type RequestWithParamsBody<P, B> = Request<P, {}, B>
 export type RequestWithParamsQueryBody<P, Q, B> = Request<P, {}, B, Q>
 
+
+export type ResponseWithCode<C extends number> = Response<{}, {}, C>
+export type ResponseWithBodyCode<B, C extends number> = Response<B, {}, C>
+
 export enum SortDirectionsType {
     asc = 1,
     desc = -1,
 }
 export interface LoginInputModel {
-    // login: string
+    login: string
     password: string
 }
 export interface UsersSearchPaginationModel {
@@ -123,16 +129,16 @@ export interface UsersSearchPaginationModel {
 
 // }
 export interface AuthInputModel {
-    userId:string
+    userId: string
     // login: string // maxLength: 10 minLength: 3
-    password: string // maxLength: 20 minLength: 6
+    passwordHash: string // maxLength: 20 minLength: 6
 }
 export interface AuthViewModel {
     id: string
-    userId:string
+    userId: string
     // login: string // maxLength: 10 minLength: 3
-    password: string // maxLength: 20 minLength: 6
-    createdAt:string
+    passwordHash: string // maxLength: 20 minLength: 6
+    createdAt: string
 }
 export interface UserInputModel {
     login: string // maxLength: 10 minLength: 3
