@@ -1,31 +1,45 @@
-import { AuthInputModel, AuthViewModel, BlogViewModel, IObject, LoginInputModel, searchNameTerm, UserInputModel, UserViewModel, } from '../types/types';
+import { IObject, Paginator, SearchPaginationModel } from '../types/types';
 import DataService from '../services/data-service';
 import mongoDbAdapter from '../adapters/mongoDb-adapter';
 import bcrypt from "bcrypt"
+import { Filter } from 'mongodb';
 
 const dataService = new DataService(mongoDbAdapter)
 
 
 class Repository {
 
-    constructor(private collection: string) { }
+    constructor(private collectionName: string) { }
 
-    protected async readAll_protected<T = IObject>(searchTerm: searchNameTerm<Partial<T>, true>) {
-        const result: T[] = await dataService.readAll(this.collection, searchTerm)
+    async readAll<T = IObject>(filter?: Filter<IObject>) {
+        const result: T[] = await dataService.readAll(this.collectionName, filter)
         return result
     }
-    protected async readOne_protected<T>(id: string) {
-        const result: T[] = await dataService.readOne(this.collection, id)
+    async readAllOrByPropPaginationSort<T>(data: SearchPaginationModel) {
+        const { pageNumber, pageSize, sortBy, sortDirection, filter } = data
+        const result: Paginator<T[]> = await dataService.readAllOrByPropPaginationSort(this.collectionName, pageNumber, pageSize, sortBy, sortDirection, filter)
         return result
     }
-    protected async createOne_protected<T extends IObject>(element: T): Promise<string> {
-        return await dataService.createOne(this.collection, element)
+    async readOne<T>(id: string) {
+        const result: T = await dataService.readOne(this.collectionName, id)
+        return result
     }
-    protected async deleteOne_protected(id: string): Promise<boolean> {
-        return await dataService.deleteOne(this.collection, id)
+    async createOne<T extends IObject>(element: Omit<T, "id">): Promise<string> {
+        return await dataService.createOne(this.collectionName, element)
     }
-    protected async deleteAll_protected(): Promise<boolean> {
-        const result = await dataService.deleteAll(this.collection)
+    async updateOne<T>(id: string, data: Partial<T>) {
+        const result: boolean = await dataService.updateOne(this.collectionName, id, data)
+        return result
+    }
+    async replaceOne<T extends IObject>(id: string, data: T) {
+        const result = await dataService.replaceOne(this.collectionName, id, data)
+        return result
+    }
+    async deleteOne(id: string): Promise<boolean> {
+        return await dataService.deleteOne(this.collectionName, id)
+    }
+    async deleteAll(): Promise<boolean> {
+        const result = await dataService.deleteAll(this.collectionName)
         return result
     }
 }

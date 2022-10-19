@@ -1,5 +1,5 @@
 import { Collection, MongoClient, Document, ObjectId, Filter } from 'mongodb'
-import { AdapterType, IObject, Paginator, searchNameTerm } from '../types/types';
+import { AdapterType, IObject, Paginator } from '../types/types';
 
 //Query Builder
 // Connection URL
@@ -31,67 +31,43 @@ class DbMongo implements AdapterType {
     async disconnect() {
         await clientMongo.close();
     }
-    async readAll(collectionName: string, searchNameTerm?: searchNameTerm, sortBy = "_id", sortDirection: 1 | -1 = 1) {
+    async readAll(collectionName: string, filter?: Filter<IObject>, sortBy = "_id", sortDirection: 1 | -1 = 1) {
 
         const collection: Collection<Document> = database.collection(collectionName)
-        if (searchNameTerm) {
-            let find: Filter<any> = {}
-            for (const key in searchNameTerm.search) {
 
-                const element = searchNameTerm.search[key];
-                searchNameTerm.strict ?
-                    find[key] = element :
-                    find[key] = { $regex: element, $options: 'i' }
-            }
+        if (filter) {
             return (await collection
-                .find(find)
+                .find(filter)
                 .sort({ [sortBy]: sortDirection })
                 .toArray())
                 .map((elem) => {
                     const { _id, ...other } = elem
-                    return { id: _id, ...other }
+                    return { id: _id.toString(), ...other }
                 })
         }
+
         return (await collection
             .find()
             .sort({ [sortBy]: sortDirection })
             .toArray())
             .map((elem) => {
-                const { _id, ...other } = elem
-                return { id: _id, ...other }
+                const { _id, ...other
+                } = elem
+                return { id: _id.toString(), ...other }
             })
     }
-    // async readAll(collectionName: string, searchNameTerm?: string) {
-    //     const collection: Collection<Document> = database.collection(collectionName)
-    //     return searchNameTerm ?
-    //         (await collection.find({ $regex: searchNameTerm }).toArray()).map((elem) => {
-    //             const { _id, ...other } = elem
-    //             return { id: _id, ...other }
-    //         }) :
-    //         (await collection.find().toArray()).map((elem) => {
-    //             const { _id, ...other } = elem
-    //             return { id: _id, ...other }
-    //         })
-    // }
-    async readCount(collectionName: string, searchNameTerm?: searchNameTerm) {
+  
+    async readCount(collectionName: string, filter?: Filter<IObject>) {
         const collection: Collection<Document> = database.collection(collectionName)
-        let filter: Filter<any> = {}
-        // const filter = searchNameTerm ? searchNameTerm : ""
-        if (searchNameTerm) {
-            for (const key in searchNameTerm.search) {
+        if (filter) return await collection.countDocuments(filter)
+        return await collection.countDocuments()
 
-                const element = searchNameTerm.search[key];
-                searchNameTerm.strict ?
-                    filter[key] = element :
-                    filter[key] = { $regex: element, $options: 'i' }
-            }
-        }
-        return await collection.countDocuments(filter)
+
     }
-    async readAllOrByPropPaginationSort(collectionName: string, pageNumber: number, pageSize: number, sortBy: string, sortDirection: 1 | -1, searchNameTerm?: searchNameTerm) {
+    async readAllOrByPropPaginationSort(collectionName: string, pageNumber: number, pageSize: number, sortBy: string, sortDirection: 1 | -1,  filter?: Filter<IObject>) {
 
         const setPaginator = async (items: any) => {
-            const count = await this.readCount(collectionName, searchNameTerm)
+            const count = await this.readCount(collectionName, filter)
             const result: Paginator<any> = {
                 "pagesCount": Math.ceil(count / pageSize),
                 "page": pageNumber,
@@ -104,24 +80,16 @@ class DbMongo implements AdapterType {
 
 
         const collection: Collection<Document> = database.collection(collectionName)
-        if (searchNameTerm) {
-            let find: Filter<any> = {}
-            for (const key in searchNameTerm.search) {
-
-                const element = searchNameTerm.search[key];
-                searchNameTerm.strict ?
-                    find[key] = element :
-                    find[key] = { $regex: element, $options: 'i' }
-            }
+        if (filter) {       
             const items = (await collection
-                .find(find)
+                .find(filter)
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .sort({ [sortBy]: sortDirection })
                 .toArray())
                 .map((elem) => {
                     const { _id, ...other } = elem
-                    return { id: _id, ...other }
+                    return { id: _id.toString(), ...other }
                 })
             const result = setPaginator(items)
 
@@ -135,7 +103,7 @@ class DbMongo implements AdapterType {
             .toArray())
             .map((elem) => {
                 const { _id, ...other } = elem
-                return { id: _id, ...other }
+                return { id: _id.toString(), ...other }
             })
         const result = setPaginator(items)
 
@@ -146,7 +114,7 @@ class DbMongo implements AdapterType {
         const result: any = await collection.findOne({ _id: new ObjectId(id) })
         if (!result) return result
         const { _id, ...other } = result
-        return { id: _id, ...other }
+        return { id: _id.toString(), ...other }
     }
     async createOne(collectionName: string, element: Document) {
         const collection: Collection<Document> = database.collection(collectionName)
@@ -163,8 +131,8 @@ class DbMongo implements AdapterType {
     }
     async replaceOne(collectionName: string, id: string, element: IObject) {
         const collection: Collection<Document> = database.collection(collectionName)
-        const result = collection.replaceOne({ _id: new ObjectId(id) }, element)
-        return result
+        const result = await collection.replaceOne({ _id: new ObjectId(id) }, element)
+        return result.modifiedCount === 1
     }
     async deleteOne(collectionName: string, id: string) {
         const collection: Collection<Document> = database.collection(collectionName)

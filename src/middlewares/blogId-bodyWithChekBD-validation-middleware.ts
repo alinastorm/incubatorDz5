@@ -1,5 +1,6 @@
-import { body, param } from 'express-validator';
-import blogsReadRepository from '../repository/blogs-read-repository';
+import { body } from 'express-validator';
+import blogsRepository from '../repository/blogs-repository';
+import { BlogViewModel } from '../types/types';
 
 
 export const blogIdBodyWithCheckBDValidationMiddleware = body('blogId')
@@ -8,7 +9,7 @@ export const blogIdBodyWithCheckBDValidationMiddleware = body('blogId')
     .isString()
     .isLength({ min: '63415f046cc943bb27921167'.length, max: '63415f046cc943bb27921167'.length })
     .custom(async (val, { req }) => {
-        const blog = await blogsReadRepository.readOne(val)
+        const blog = await blogsRepository.readOne<BlogViewModel>(val)
         if (!blog) throw Error('bloger not found')
         req.body.blogName = blog.name
     })

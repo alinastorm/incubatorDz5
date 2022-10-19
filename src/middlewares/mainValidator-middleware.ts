@@ -6,7 +6,7 @@ export const mainValidator = (req: any, res: Response, next: NextFunction) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        console.log('mainValidator:', errors);
+        // console.log('mainValidator:', errors);
 
         const error: Array<FieldError> = errors.array({ onlyFirstError: true }).map(e => {
             return {

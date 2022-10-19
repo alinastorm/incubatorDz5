@@ -1,18 +1,20 @@
-import { Request, Response } from 'express';
-import authReducer from '../reducers/auth-reducer';
-import blogsWriteRepository from '../repository/blogs-write-repository';
-import postsWriteRepository from '../repository/posts-write-repository';
-import usersWriteRepository from '../repository/users-write-repository';
+import { Request } from 'express';
+import authRepository from '../repository/auth-repository';
+import blogsRepository from '../repository/blogs-repository';
+import postsRepository from '../repository/posts-repository';
+import usersRepository from '../repository/users-repository';
+
+
 import { HTTP_STATUSES, ResponseWithCode } from '../types/types';
 
 
 class Controller {
 
     async deleteAll(req: Request, res: ResponseWithCode<204>) {
-        await postsWriteRepository.deleteAll()
-        await blogsWriteRepository.deleteAll()
-        await usersWriteRepository.deleteAll()
-        await authReducer.deleteAll()
+        await postsRepository.deleteAll()
+        await blogsRepository.deleteAll()
+        await usersRepository.deleteAll()
+        await authRepository.deleteAll()
         res.status(HTTP_STATUSES.NO_CONTENT_204).send('All data is deleted')
     }
 

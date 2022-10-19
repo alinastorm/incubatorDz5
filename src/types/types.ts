@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { Response } from 'express-serve-static-core';
+import { Filter } from 'mongodb';
 
 export interface BlogInputModel {
     name: string//    maxLength: 15
@@ -17,7 +18,7 @@ export interface PostInputModel {
     blogId: string
 }
 export interface BlogViewModel {
-    id?: string
+    id: string
     name: string// max 15
     youtubeUrl: string
     createdAt: string
@@ -49,9 +50,9 @@ export interface Paginator<T> {
 
 export interface AdapterType {
     connect(): any
-    readAll(collectionName: string, searchNameTerm?: searchNameTerm, sortBy?: string, sortDirection?: number): any
-    readAllOrByPropPaginationSort(collectionName: string, pageNumber: number, pageSize: number, sortBy: string, sortDirection: 1 | -1, searchNameTerm?: IObject): any
-    readCount(collectionName: string, searchNameTerm?: searchNameTerm): any
+    readAll(collectionName: string, filter?: Filter<IObject>, sortBy?: string, sortDirection?: number): any
+    readAllOrByPropPaginationSort(collectionName: string, pageNumber: number, pageSize: number, sortBy: string, sortDirection: 1 | -1, filter?: Filter<IObject>): any
+    readCount(collectionName: string, filter?: Filter<IObject>): any
     readOne(collectionName: string, id: string): any
     createOne(collectionName: string, element: IObject): any
     updateOne(collectionName: string, id: string, data: IObject): any
@@ -60,10 +61,7 @@ export interface AdapterType {
     deleteAll(collectionName: string): any
 }
 
-export interface searchNameTerm<T = IObject, U = boolean> {
-    search: T
-    strict: U
-}
+
 export enum HTTP_STATUSES {
     OK_200 = 200,
     CREATED_201 = 201,// Если был создан ресурс, то серверу следует вернуть ответ 201 (Created) с указанием URI нового ресурса в заголовке Location.
@@ -102,6 +100,50 @@ export interface UsersSearchPaginationModel {
      * Default value : null
      */
     searchEmailTerm: string
+    /**PageNumber is number of portions that should be returned.
+     * Default value : 1
+     */
+    pageNumber: number
+    /**PageSize is portions size that should be returned
+     * Default value : 10
+     */
+    pageSize: number
+    /** Sorting term
+     * Default value : createdAt
+     */
+    sortBy: string
+    /** Sorting direction
+     * Default value: desc
+     */
+    sortDirection: 1 | -1
+}
+export interface SearchPaginationModel {
+    /**search Name Term
+     * Default value : null
+     */
+     filter?: Filter<IObject>
+    /**PageNumber is number of portions that should be returned.
+     * Default value : 1
+     */
+    pageNumber: number
+    /**PageSize is portions size that should be returned
+     * Default value : 10
+     */
+    pageSize: number
+    /** Sorting term
+     * Default value : createdAt
+     */
+    sortBy: string
+    /** Sorting direction
+     * Default value: desc
+     */
+    sortDirection: 1 | -1
+}
+export interface InputPaginationModel {
+    /**search Name Term
+     * Default value : null
+     */
+    searchNameTerm: string
     /**PageNumber is number of portions that should be returned.
      * Default value : 1
      */
